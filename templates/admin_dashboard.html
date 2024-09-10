@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style2.css') }}">
+    <title>Billing Software</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <script>
+        function toggleDropdown() {
+            document.getElementById('userDropdown').classList.toggle('hidden');
+        }
+    </script>
+</head>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f5f7;
+    color: #333;
+  }
+  .header {
+    background: linear-gradient(to right, #4b6cb7, #182848);
+    color: #fff;
+    padding: 20px;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  .tabs {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+  }
+  .tab-button {
+    background: #eee;
+    border: none;
+    padding: 7px 24px;
+    border-radius: 15px;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+.tab-button.active, .tab-button:hover {
+    background: #d5ffdd;
+    color: #656565;
+    transform: translateY(-2px);
+    border-color: #a4ff9b;
+    border-style: solid;
+    border-width: 2px;
+}
+  .card {
+    background: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 15px;
+    margin: 20px;
+    padding: 20px;
+    transition: box-shadow 0.3s;
+    --tw-border-opacity: 1;
+    border-color: rgb(229 231 235 / var(--tw-border-opacity));
+	border-width: 2px;
+  }
+  .card:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  }
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+  }
+  th, td {
+    padding: 5px;
+    text-align: left;
+    transition: background-color 0.3s ease;
+  }
+  th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+	color: #616161;
+  }
+  td {
+    background: #fff;
+  }
+  tr:hover td {
+    background-color: #f5f5f5;
+  }
+
+  start1 {
+    border-radius: 0px 5px 0px 5px;
+  }
+  end1 {
+    border-radius: 5px 0px 5px 0px;
+  }
+.delete-btn {
+    padding: 8px 12px;
+    border: none;
+    background-color: #ff6347; /* Tomato color for delete */
+    color: white;
+    border-radius: 0px 0px 5px 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-btn i {
+    margin-right: 5px;
+}
+
+.delete-btn:hover {
+    background-color: #ff4500; /* Darker shade for hover */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.delete-btn:active {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+}
+
+.delete-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 99, 71, 0.5);
+}
+
+.edit-btn {
+    padding: 8px 20.4px;
+    border: none;
+    background-color: #47bdff; /* Tomato color for delete */
+    color: white;
+    border-radius: 5px 5px 0px 0px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-btn:hover {
+    background-color: #16abff; /* Darker shade for hover */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.edit-btn:active {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+}
+
+.edit-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 99, 71, 0.5);
+}
+</style>
+<body class="bg-[#fff]" style="font-family: Rubik, sans-serif">
+    <nav class="max-w-screen-xl mx-auto px-5 fixed top-0 left-0 right-0 w-full h-16 flex items-center justify-between">
+        <a href="{{ url_for('home') }}" class="text-2xl font-black highlight flex items-center gap-2">
+            <img src="https://cdn.rapidroot.net/uploads/1003c6f0-b59c-4353-b81d-08e4436fa62c.png" class="h-12">
+        </a>
+        <div class="flex gap-3 items-center relative">
+            {% if session.get('username') %}
+                <!-- User Profile and Dropdown -->
+                <div class="flex items-center gap-2 cursor-pointer" onclick="toggleDropdown()">
+					<span class="font-semibold text-gray-700" style="font-family: Rubik, sans-serif">{{ session.get('username') }}</span>
+                    <img src="https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png" alt="Profile Picture" class="w-10 h-10 rounded-full">
+                </div>
+                <!-- Dropdown Menu -->
+                <div id="userDropdown" class="absolute right-0 mt-44 border-2 border-gray-200 w-48 bg-white rounded-xl shadow-xl hidden z-50">
+                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Dashboard</a>
+                    {% if session.get('username') == 'admin' %}
+                        <a href="{{ url_for('admin_dashboard') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Admin</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-red-600 hover:bg-red-100">Logout</a>
+                </div>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="font-semibold border border-gray-700 bg-[rgb(41,43,56)] text-white px-4 py-1.5 rounded-lg">Login</a>
+                <a href="{{ url_for('register') }}" class="font-semibold border border-green-500 bg-gradient-to-t from-green-600 to-green-500 text-white px-4 py-1.5 rounded-lg">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="flex flex-col items-center px-2 overflow-hidden">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, message in messages %}
+                    <!-- Conditional styling for flash messages -->
+                    <div class="flex flex-row 
+                        {% if category == 'success' %}
+                            bg-green-100 border border-green-400 text-green-700
+                        {% elif category == 'danger' %}
+                            bg-red-100 border border-red-400 text-red-700
+                        {% elif category == 'warning' %}
+                            bg-yellow-100 border border-yellow-400 text-yellow-700
+                        {% elif category == 'info' %}
+                            bg-blue-100 border border-blue-400 text-blue-700
+                        {% else %}
+                            bg-gray-100 border border-gray-400 text-gray-700
+                        {% endif %}
+                        p-2 w-[64rem] rounded-lg mb-4" style="font-family: Rubik, sans-serif">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9h.01" /><path d="M11 12h1v4h1" /><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /></svg>
+                        <li class="{{ category }}">{{ message }}</li>
+                    </div>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+
+<!-- Tabs -->
+    <div class="tabs flex justify-center z-10">
+        <button class="tab-button active" data-tab="users">Manage Users</button>
+        <button class="tab-button" data-tab="products">Manage Products</button>
+        <button class="tab-button" data-tab="categories">Manage Categories</button>
+    </div>
+
+<!-- Tab Content -->
+<div class="tab-content mt-6">
+
+    <!-- Users Tab -->
+    <div id="users" class="tab-pane active">
+        <div class="card border-2 border-gray-200">
+            <div class="card-body">
+                <h5 class="mt-2 text-xl text-gray-500">Manage Categories</h5>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center rounded-l-xl">#</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col" class="rounded-r-xl">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td scope="row" class="text-center rounded-l-xl">#{{ loop.index }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td class="rounded-r-xl">
+                                <a href="{{ url_for('edit_user', user_id=user.id) }}" class="edit-btn"><svg  xmlns="http://www.w3.org/2000/svg"  class="h-4 w-4 mb-1 mr-1"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>Edit</a>
+                                <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" class="d-inline">
+        <button type="submit" class="delete-btn">
+            <svg  xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mb-1 mr-1"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg> Delete
+        </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Tab -->
+    <div id="products" class="tab-pane">
+        <div class="card">
+            <div class="card-body">
+				<div class="mb-2 flex justify-between">
+					<h5 class="mt-2 text-xl text-gray-500">Manage Products</h5>
+					<a href="{{ url_for('add_product') }}" class="text-green-500 bg-green-100 py-2 px-4 border-2 border-green-300 rounded-xl">Add New Product</a>
+				</div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center rounded-l-xl">#</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col" class="rounded-r-xl">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td scope="row" class="text-center rounded-l-xl">#{{ loop.index }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>${{ product.price }}</td>
+                            <td>{{ product.category.name }}</td>
+                            <td>{{ product.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td class="rounded-r-xl">
+                                <a href="{{ url_for('edit_product', product_id=product.id) }}" class="edit-btn"><svg  xmlns="http://www.w3.org/2000/svg"  class="h-4 w-4 mb-1 mr-1"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>Edit</a>
+                                <form method="POST" action="{{ url_for('delete_product', product_id=product.id) }}" class="d-inline">
+        <button type="submit" class="delete-btn">
+            <svg  xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mb-1 mr-1"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg> Delete
+        </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Tab -->
+    <div id="categories" class="tab-pane">
+        <div class="card">
+            <div class="card-body">
+				<div class="mb-2 flex justify-between">
+					<h5 class="mt-2 text-xl text-gray-500">Manage Categories</h5>
+					<a href="{{ url_for('add_category') }}" class="text-green-500 bg-green-100 py-2 px-4 border-2 border-green-300 rounded-xl">Add New Category</a>
+				</div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center rounded-l-xl">#</th>
+                            <th scope="col">Category Name</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col" class="rounded-r-xl">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                        <tr>
+                            <td scope="row" class="rounded-l-xl text-center">#{{ loop.index }}</td>
+                            <td>{{ category.name }}</td>
+                            <td>{{ category.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td class="rounded-r-xl">
+    <form method="POST" action="{{ url_for('delete_category', category_id=category.id) }}" class="d-inline">
+        <button type="submit" class="delete-btn">
+            <svg  xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mb-1 mr-1"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg> Delete
+        </button>
+    </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

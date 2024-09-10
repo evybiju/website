@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex">
+	<img src="https://cdn.rapidroot.net/uploads/1003c6f0-b59c-4353-b81d-08e4436fa62c.png" class="self-center mb-2 h-24">
+</div>
+
+<div class="py-6 rounded-lg" style="font-family: Rubik, sans-serif">
+	<div class="flex flex-col">
+		<form method="POST" action="{{ url_for('register') }}" class="flex flex-col w-full self-center">
+	
+			<label class="text-sm font-semibold ml-1 mb-1 text-gray-500">Username</label>
+			<input class="bg-gray-100 border border-gray-300 p-2 mb-4 rounded-lg" type="text" name="username" placeholder="Username" required>
+			
+			<label class="text-sm font-semibold ml-1 mb-1 text-gray-500">Email</label>
+			<input class="bg-gray-100 border border-gray-300 p-2 mb-4 rounded-lg" type="text" name="email" placeholder="Email" required>
+		
+			<label class="text-sm font-semibold ml-1 mb-1 text-gray-500">Password</label>
+			<input class="bg-gray-100 border border-gray-300 p-2 rounded-lg" type="password" name="password" placeholder="Password" required>
+		
+			<button class="mt-8" type="submit"><a class="font-semibold border border-green-500 bg-gradient-to-t from-green-600 to-green-500 text-white px-36 py-2.5 rounded-lg">Register</a></button>
+
+			<div class="flex flex-row justify-start">
+				<svg  xmlns="http://www.w3.org/2000/svg" class="text-gray-400 h-5 w-5 mt-3 ml-1"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-corner-up-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 18v-6a3 3 0 0 0 -3 -3h-10l4 -4m0 8l-4 -4" /></svg>
+				<a class="text-gray-400 mt-3" style="font-family: Rubik, sans-serif" href="{{ url_for('login') }}">Back to login</a>
+			</div>
+
+		</form>
+	</div>
+</div>
+{% endblock %}

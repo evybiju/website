@@ -1,0 +1,33 @@
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #f3f3f3;
+}
+
+button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+button.text-red-500 {
+    background-color: #f56565;
+    color: white;
+}
+
+button.text-blue-500 {
+    background-color: #4299e1;
+    color: white;
+}

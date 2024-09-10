@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex justify-center mt-6">
+    <h2 class="text-xl font-bold">Browse Products</h2>
+</div>
+
+<div class="py-6 rounded-lg" style="font-family: Rubik, sans-serif">
+    <!-- Category Selection Form -->
+    <form method="POST" action="{{ url_for('products') }}" class="flex flex-col items-center">
+        <label class="text-sm font-semibold ml-1 mb-2 text-gray-500">Select Category</label>
+        <select name="category_id" class="bg-gray-100 border border-gray-300 p-2 mb-4 rounded-lg">
+            <option value="">-- Choose Category --</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.id == selected_category_id %} selected {% endif %}>
+                {{ category.name }}
+            </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="mt-2">
+            <a class="font-semibold border border-green-500 bg-gradient-to-t from-green-600 to-green-500 text-white px-16 py-2.5 rounded-lg">Filter</a>
+        </button>
+    </form>
+
+    <!-- Products Display -->
+    {% if products %}
+    <div class="mt-6">
+        <h3 class="text-lg font-semibold">Products in Selected Category</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            {% for product in products %}
+            <div class="bg-white border border-gray-200 p-4 rounded-lg shadow-lg">
+                <h4 class="text-lg font-semibold">{{ product.name }}</h4>
+                <p class="text-sm text-gray-500">{{ product.description }}</p>
+                <p class="text-md font-bold mt-2">${{ product.price }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="mt-6">
+        <p class="text-gray-500 text-center">No products available. Please select a category.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
